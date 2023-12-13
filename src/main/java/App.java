@@ -1,3 +1,4 @@
+import org.hamcrest.core.Is;
 import pojo.IssoData;
 import pojo.ShortIsso;
 import properties.IssoCodesTypes;
@@ -19,14 +20,14 @@ public class App {
             Set<Integer> validIssoTypes = IssoCodesTypes.getFitleredIssoTypes(excludedTypes);
             Map<Integer, List<String>> mappingIds = excelReader.getMapOfIdsFromExcelMappingFile(MyConfig.MAPPING_FILE, sheetName);
 
-            IssoProvider issoProvider = new IssoProvider(mappingIds);
+            IssoProvider shortIssoProvider = new ShortIssoProvider(mappingIds);
+            IssoProvider fullIssoProvider = new FullIssoProvider(mappingIds);
 
-            List<ShortIsso> filteredShortIsso = issoProvider.getShortIssoWithGivenTypes(validIssoTypes);
-            List<IssoData> issoDataFromShort = issoProvider.convertShortIssoToIssoData(filteredShortIsso);
-            List<IssoData> issoDataFromFull = issoProvider.getIssoDataWithGivenTypes(validIssoTypes);
+            List<IssoData> issoDataFromShort = shortIssoProvider.getIssoDataWithGivenTypes(validIssoTypes);
+            List<IssoData> issoDataFromFull = fullIssoProvider.getIssoDataWithGivenTypes(validIssoTypes);
 
-            issoProvider.createExcelFileBasedOnData(issoDataFromShort, "issoDataResultShort");
-            issoProvider.createExcelFileBasedOnData(issoDataFromFull, "issoDataResultFull");
+            shortIssoProvider.createExcelFileBasedOnData(issoDataFromShort, "issoDataResultShort");
+            fullIssoProvider.createExcelFileBasedOnData(issoDataFromFull, "issoDataResultFull");
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
