@@ -4,13 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
+@Getter
 public class ShortIsso {
-    @Getter
-    public int cIsso;
-    public int god;
-    @Getter
-    public int cTypisso;
-    public String nTypisso;
-    public String descr;
-    public int cDor;
+    private int cIsso;
+    private int god;
+    private int cTypisso;
+    private String nTypisso;
+    private String descr;
+    private int cDor;
 }

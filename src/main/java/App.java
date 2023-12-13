@@ -1,15 +1,35 @@
 import pojo.IssoData;
+import pojo.ShortIsso;
+import properties.IssoCodesTypes;
+import properties.MyConfig;
+import workers.ExcelReader;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class App {
-    public static void main(String[] args) throws Exception {
-        Set<Integer> validIssoTypes = Set.of(10, 20, 30, 40, 50, 65, 80, 100, 110, 120, 130, 140, 150, 160, 180, 220, 230);
-        IssoProvider issoProvider = new IssoProvider();
+    public static void main(String[] args) {
+        String sheetName = "Лист 1";
+        ExcelReader excelReader = new ExcelReader();
 
-        List<Integer> filteredShortIssoCodes = issoProvider.getFilteredIssoCodes(validIssoTypes).subList(0, 5);
-        List<IssoData> issoData = issoProvider.convertIssoCodesToIssoData(filteredShortIssoCodes);
-        issoProvider.createExcelFileBasedOnData(issoData, "issoDataResult");
+        try {
+            Set<Integer> excludedTypes = Set.of(70, 90);
+            Set<Integer> validIssoTypes = IssoCodesTypes.getFitleredIssoTypes(excludedTypes);
+            Map<Integer, List<String>> mappingIds = excelReader.getMapOfIdsFromExcelMappingFile(MyConfig.MAPPING_FILE, sheetName);
+
+            IssoProvider issoProvider = new IssoProvider(mappingIds);
+
+            List<ShortIsso> filteredShortIsso = issoProvider.getShortIssoWithGivenTypes(validIssoTypes);
+            List<IssoData> issoDataFromShort = issoProvider.convertShortIssoToIssoData(filteredShortIsso);
+            List<IssoData> issoDataFromFull = issoProvider.getIssoDataWithGivenTypes(validIssoTypes);
+
+            issoProvider.createExcelFileBasedOnData(issoDataFromShort, "issoDataResultShort");
+            issoProvider.createExcelFileBasedOnData(issoDataFromFull, "issoDataResultFull");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 }
