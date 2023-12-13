@@ -17,7 +17,6 @@ public class IssoProviderTest {
     IssoProvider shortIssoProvider;
     IssoProvider fullIssoProvider;
 
-
     @BeforeAll
     public void init() throws IOException {
         String filePath = "src/main/resources/abdmMapping.xlsx";

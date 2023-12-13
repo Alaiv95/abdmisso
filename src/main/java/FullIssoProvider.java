@@ -1,4 +1,4 @@
-import org.hamcrest.core.Is;
+import lombok.extern.slf4j.Slf4j;
 import pojo.IssoData;
 import services.IssoService;
 
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Slf4j
 public class FullIssoProvider extends IssoProvider {
     private final List<Map<Object, Object>> allFullIsso;
 
@@ -23,7 +24,7 @@ public class FullIssoProvider extends IssoProvider {
                         try {
                             return buildIssoData(fullIsso);
                         } catch (Exception e) {
-                            throw new RuntimeException(e);
+                            log.error(e.getMessage());
                         }
                     }
 

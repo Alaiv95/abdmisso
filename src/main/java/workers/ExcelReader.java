@@ -1,5 +1,6 @@
 package workers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -10,10 +11,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
+@Slf4j
 public class ExcelReader {
     private final Map<Integer, List<String>> idMapping = new HashMap<>();
 
     public Map<Integer, List<String>> getMapOfIdsFromExcelMappingFile(String file, String sheet) throws IOException {
+        log.info("Reading data from excel file.");
+
         XSSFWorkbook hssfWorkbook = new XSSFWorkbook(new FileInputStream(file));
         XSSFSheet hssfSheet = hssfWorkbook.getSheet(sheet);
         int rowAmount = hssfSheet.getPhysicalNumberOfRows();
@@ -31,6 +35,9 @@ public class ExcelReader {
                 addValue(abddId, abdmMapid);
             }
         }
+
+        log.info("Finished reading data from excel file.");
+
         return idMapping;
     }
 

@@ -1,5 +1,8 @@
 package services;
 
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import properties.MyConfig;
 
 import java.sql.*;
@@ -7,7 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+
 public class DataBase {
+    private static final Logger logger = LoggerFactory.getLogger(DataBase.class);
+
     public static List<Integer> getAllExistingObjectsIsso() {
         String searchQuery = "select \"Payload\"->>'numberISSO' code from \"Cards\" where \"Type\" in (29, 36, 74, 75);";
         List<Integer> codes = new ArrayList<>();
@@ -19,7 +25,7 @@ public class DataBase {
                 codes.add(issoCode);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
 
         return codes;

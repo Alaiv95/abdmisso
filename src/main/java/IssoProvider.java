@@ -1,3 +1,4 @@
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import pojo.IssoData;
 import services.DataBase;
@@ -9,13 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 public abstract class IssoProvider {
 
     protected final List<Integer> existingObjectsIsso;
     protected final Map<Integer, List<String>> idMapping;
     protected final Serializer serializer;
     private final ExcelWriter excelWriter;
-
 
     public IssoProvider(Map<Integer, List<String>> mapping) {
         existingObjectsIsso = DataBase.getAllExistingObjectsIsso();

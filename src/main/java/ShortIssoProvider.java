@@ -1,3 +1,4 @@
+import lombok.extern.slf4j.Slf4j;
 import pojo.IssoData;
 import pojo.ShortIsso;
 import services.IssoService;
@@ -6,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Slf4j
 public class ShortIssoProvider extends IssoProvider {
     private final List<Map<Object, Object>> allShortIsso;
 
@@ -37,7 +39,7 @@ public class ShortIssoProvider extends IssoProvider {
                         try {
                             return buildIssoData(map);
                         } catch (Exception e) {
-                            throw new RuntimeException(e);
+                            log.error(e.getMessage());
                         }
                     }
 
