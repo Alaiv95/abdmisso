@@ -19,6 +19,7 @@ public class IssoData {
     private int cIsso;
     private boolean isEmpty;
     private String abddIds;
+    private String length;
 
     @Override
     public boolean equals(Object o) {

@@ -65,7 +65,7 @@ public class IssoService {
     public static List<Map<Object, Object>> getAllFullIssoOfType(int issoType) {
         String allIssoUrl = MyConfig.ALL_FULL_ISSO_URL + issoType;
 
-        logger.info("Getting all full isso based on types from ABDM.");
+
 
         ResponseBody<?> body = given()
                 .contentType(ContentType.JSON)
@@ -76,7 +76,7 @@ public class IssoService {
                 .response()
                 .getBody();
 
-        logger.info("Finished getting asll full isso based on types.");
+
 
         if (body.asString().isEmpty()) {
             return List.of(Map.of());
@@ -88,6 +88,7 @@ public class IssoService {
     }
 
     public static List<Map<Object, Object>> getAllFullIsso() {
+        logger.info("Getting all full isso based on types from ABDM.");
         Set<Integer> allIssoTypes = IssoCodesTypes.getAllIssoTypes();
 
         return allIssoTypes

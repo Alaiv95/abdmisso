@@ -1,8 +1,6 @@
-import org.hamcrest.core.Is;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.IssoData;
-import pojo.ShortIsso;
 import properties.IssoCodesTypes;
 import properties.MyConfig;
 import workers.ExcelReader;
@@ -18,18 +16,19 @@ public class App {
         ExcelReader excelReader = new ExcelReader();
         Logger logger = LoggerFactory.getLogger(App.class);
 
+
         try {
             Set<Integer> excludedTypes = Set.of(70, 90);
             Set<Integer> validIssoTypes = IssoCodesTypes.getFitleredIssoTypes(excludedTypes);
             Map<Integer, List<String>> mappingIds = excelReader.getMapOfIdsFromExcelMappingFile(MyConfig.MAPPING_FILE, sheetName);
 
-            IssoProvider shortIssoProvider = new ShortIssoProvider(mappingIds);
+//            IssoProvider shortIssoProvider = new ShortIssoProvider(mappingIds);
             IssoProvider fullIssoProvider = new FullIssoProvider(mappingIds);
 
-            List<IssoData> issoDataFromShort = shortIssoProvider.getIssoDataWithGivenTypes(validIssoTypes);
+//            List<IssoData> issoDataFromShort = shortIssoProvider.getIssoDataWithGivenTypes(validIssoTypes);
             List<IssoData> issoDataFromFull = fullIssoProvider.getIssoDataWithGivenTypes(validIssoTypes);
 
-            shortIssoProvider.createExcelFileBasedOnData(issoDataFromShort, "issoDataResultShort");
+//            shortIssoProvider.createExcelFileBasedOnData(issoDataFromShort, "issoDataResultShort");
             fullIssoProvider.createExcelFileBasedOnData(issoDataFromFull, "issoDataResultFull");
         } catch (IOException e) {
             logger.error(e.getMessage());

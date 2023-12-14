@@ -1,6 +1,8 @@
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import pojo.IssoData;
+import properties.IssoCodesTypes;
 import services.DataBase;
 import workers.ExcelWriter;
 import workers.Serializer;
@@ -44,6 +46,8 @@ public abstract class IssoProvider {
         String issoCode = map.get("issoCode").toString();
         String issoTypeCode = map.get("issoTypeCode").toString();
         String abddIds = getAbddRoadIds(Integer.parseInt(dorCode));
+        String length = getObjectLength(map, Integer.parseInt(issoTypeCode));
+
 
         return IssoData.builder()
                 .cIsso(Integer.parseInt(issoCode))
@@ -54,17 +58,60 @@ public abstract class IssoProvider {
                 .dorCode(dorCode)
                 .issoTypeCode(issoTypeCode)
                 .abddIds(abddIds)
+                .length(length)
                 .isEmpty(false)
                 .build();
     }
 
+    private String getObjectLength(Map<Object, Object> map, int issoType) {
+        String length = "Длина отсутствует.";
+
+        if (IssoCodesTypes.isBridge(issoType))
+            length = getObjectLength(map, "perexod", "l_most");
+        if (IssoCodesTypes.isTube(issoType))
+            length = getObjectLength(map, "construction", "l_tr");
+        if (IssoCodesTypes.isGallery(issoType))
+            length = getObjectLength(map, "gallery", "l_gal");
+        if (IssoCodesTypes.isTunnel(issoType))
+            length = getObjectLength(map, "tonnel", "l_ton");
+
+        return length;
+    }
+
+    private String getObjectLength(Map<Object, Object> map, String mapKey, String valKey) {
+        Object objectData = map.get(mapKey);
+
+        if (objectData == null)
+            return "Объект с длиной равен null";
+
+        Object value;
+
+        try {
+            Map<?, ?> objectDataMap = convertObjectToMap(objectData);
+            value = objectDataMap.get(valKey);
+        } catch (Exception e) {
+            value = "Объект пуст или не валидного формата.";
+        }
+
+        return value == null ? null : value.toString();
+    }
+
     protected Map<?, ?> convertObjectToMap(Object object) throws Exception {
+        if (object instanceof List<?>)
+            return convertObjectToMap(convertObjectToList(object).get(0));
+
         if (object instanceof Map<?, ?>)
             return (Map<?, ?>) object;
         else
             throw new Exception("Объект не является объектом map");
     }
 
+    private List<?> convertObjectToList(Object object) throws Exception {
+        if (object instanceof List<?>)
+            return (List<?>) object;
+        else
+            throw new Exception("Объект не является объектом List");
+    }
     protected IssoData getEmptyData(int issoCode, int roadCode, int issoType) {
         String abddIds = getAbddRoadIds(roadCode);
 

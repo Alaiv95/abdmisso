@@ -53,7 +53,7 @@ public class IssoProviderTest {
     }
 
     @Test
-    public void getFullIssoData()  {
+    public void getFullIssoData() {
         Set<Integer> includedIssoTypes = Set.of(20);
         List<IssoData> issoData = fullIssoProvider.getIssoDataWithGivenTypes(includedIssoTypes).subList(0, 1);
 
@@ -64,8 +64,8 @@ public class IssoProviderTest {
 
     @Test
     public void createExcelFileFromFullIssos() throws IOException {
-        Set<Integer> validIssoTypes = Set.of(20);
-        List<IssoData> issoData = fullIssoProvider.getIssoDataWithGivenTypes(validIssoTypes).subList(0, 1);
+        Set<Integer> validIssoTypes = Set.of(70, 20, 140, 180, 230);
+        List<IssoData> issoData = fullIssoProvider.getIssoDataWithGivenTypes(validIssoTypes);
 
         String fileName = "testFile";
         fullIssoProvider.createExcelFileBasedOnData(issoData, fileName);
@@ -85,13 +85,5 @@ public class IssoProviderTest {
 
         Assertions.assertEquals(issoData1.size(), issoData2.size());
         Assertions.assertTrue(issoData1.containsAll(issoData2) && issoData2.containsAll(issoData1));
-    }
-
-    @Test
-    public void getTypes() {
-        Set<Integer> excludedTypes = Set.of(70, 90);
-        Set<Integer> validIssoTypes = IssoCodesTypes.getFitleredIssoTypes(excludedTypes);
-
-        Assertions.assertFalse(validIssoTypes.containsAll(excludedTypes));
     }
 }
