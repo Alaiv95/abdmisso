@@ -16,4 +16,8 @@ public interface MyConfig {
     String DB_PASS = config.getString("DB_PASS");
     String MAPPING_FILE = config.getString("MAPPING_FILE");
     String ALL_FULL_ISSO_URL = config.getString("ALL_FULL_ISSO_URL");
+
+    String W_DB_URL = config.getString("W_DB_URL");
+    String W_DB_USER = config.getString("W_DB_USER");
+    String W_DB_PASS = config.getString("W_DB_PASS");
 }
