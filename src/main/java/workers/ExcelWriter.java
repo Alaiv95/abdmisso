@@ -29,7 +29,8 @@ public class ExcelWriter {
         sheet.setColumnWidth(5, 10000);
         sheet.setColumnWidth(6, 4000);
         sheet.setColumnWidth(7, 4000);
-        sheet.setColumnWidth(8, 4000);
+        sheet.setColumnWidth(8, 7000);
+        sheet.setColumnWidth(9, 11000);
 
         row = sheet.createRow(0);
 
@@ -52,6 +53,7 @@ public class ExcelWriter {
         initCell(headerStyle, 6, "КМ");
         initCell(headerStyle, 7, "М");
         initCell(headerStyle, 8, "Длина сооружения");
+        initCell(headerStyle, 9, "Пересечения с дорогами АБДД");
 
 
         defaultStyle = workbook.createCellStyle();
@@ -86,6 +88,7 @@ public class ExcelWriter {
         initCell(basedStyle, 6, String.valueOf(issoData.getKm()));
         initCell(basedStyle, 7, String.valueOf(issoData.getM()));
         initCell(basedStyle, 8, String.valueOf(issoData.getLength()));
+        initCell(basedStyle, 9, String.valueOf(issoData.getRoadsWithMatchingLen()));
 
         currentRowNumber++;
     }

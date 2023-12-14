@@ -2,6 +2,7 @@ package pojo;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Objects;
@@ -20,6 +21,8 @@ public class IssoData {
     private boolean isEmpty;
     private String abddIds;
     private String length;
+    @Setter
+    private String roadsWithMatchingLen;
 
     @Override
     public boolean equals(Object o) {

@@ -1,14 +1,13 @@
 package services;
 
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pojo.Road;
 import properties.MyConfig;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class DataBase {
@@ -29,6 +28,41 @@ public class DataBase {
         }
 
         return codes;
+    }
+
+    public static Map<String, Road> getRoadData(List<String> roadIds) {
+        String searchQuery = String.format("select \"Id\", \"StartDecree\", \"EndDecree\" from \"Roads\" where \"Id\" in (%s);",
+                roadIds.stream().map(v -> "?").collect(Collectors.joining(", ")));
+
+        Map<String, Road> roads = new HashMap<>();
+
+        try (var connection = setupConnection(); var statement = connection.prepareStatement(searchQuery)) {
+            for (int i = 1; i <= roadIds.size(); i++)
+                statement.setString(i, roadIds.get(i - 1));
+
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                int start = Integer.parseInt(rs.getString("StartDecree")
+                        .replaceAll("[+-]", ""));
+                int end = Integer.parseInt(rs.getString("EndDecree")
+                        .replaceAll("[+-]", ""));
+                String id = rs.getString("Id");
+
+                Road road = Road
+                        .builder()
+                        .start(start)
+                        .end(end)
+                        .roadId(id)
+                        .build();
+
+                roads.put(id, road);
+            }
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return roads;
     }
 
     protected static Connection setupConnection() throws SQLException {

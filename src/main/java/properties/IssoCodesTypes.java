@@ -8,7 +8,6 @@ public class IssoCodesTypes {
             = Set.of(10, 20, 30, 40, 50, 65, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 180, 220, 230);
 
 
-
     public static Set<Integer> getAllIssoTypes() {
         return allIssoTypes;
     }

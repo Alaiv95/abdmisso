@@ -82,7 +82,6 @@ public class IssoProviderTest {
         List<IssoData> issoData1 = shortIssoProvider.getIssoDataWithGivenTypes(excludedIssoTypes);
         List<IssoData> issoData2 = fullIssoProvider.getIssoDataWithGivenTypes(excludedIssoTypes);
 
-
         Assertions.assertEquals(issoData1.size(), issoData2.size());
         Assertions.assertTrue(issoData1.containsAll(issoData2) && issoData2.containsAll(issoData1));
     }
