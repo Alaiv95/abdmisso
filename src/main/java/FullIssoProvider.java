@@ -1,5 +1,5 @@
 import lombok.extern.slf4j.Slf4j;
-import pojo.IssoData;
+import models.IssoData;
 import services.IssoService;
 
 import java.util.List;

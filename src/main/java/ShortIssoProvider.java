@@ -1,6 +1,6 @@
 import lombok.extern.slf4j.Slf4j;
-import pojo.IssoData;
-import pojo.ShortIsso;
+import models.IssoData;
+import models.ShortIsso;
 import services.IssoService;
 
 import java.util.List;

@@ -3,7 +3,7 @@ package services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.IssoData;
+import models.IssoData;
 import properties.MyConfig;
 
 import java.sql.Connection;
@@ -14,6 +14,16 @@ import java.util.Properties;
 
 public class DataBaseWriter {
     private static final Logger logger = LoggerFactory.getLogger(DataBaseWriter.class);
+
+    public static void dropIssoTable() {
+        String query = "DROP TABLE IssoData;";
+
+        try (Connection connection = setupConnection(); Statement statement = connection.createStatement()) {
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+    }
 
     public static void createIssoDataTable() {
         String createTableQuery = """

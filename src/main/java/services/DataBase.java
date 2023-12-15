@@ -2,7 +2,7 @@ package services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.Road;
+import models.Road;
 import properties.MyConfig;
 
 import java.sql.*;

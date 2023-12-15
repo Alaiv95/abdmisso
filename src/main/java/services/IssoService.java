@@ -65,8 +65,6 @@ public class IssoService {
     public static List<Map<Object, Object>> getAllFullIssoOfType(int issoType) {
         String allIssoUrl = MyConfig.ALL_FULL_ISSO_URL + issoType;
 
-
-
         ResponseBody<?> body = given()
                 .contentType(ContentType.JSON)
                 .when()
@@ -75,8 +73,6 @@ public class IssoService {
                 .extract()
                 .response()
                 .getBody();
-
-
 
         if (body.asString().isEmpty()) {
             return List.of(Map.of());

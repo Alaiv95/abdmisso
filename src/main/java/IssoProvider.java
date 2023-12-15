@@ -1,7 +1,5 @@
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import pojo.IssoData;
+import models.IssoData;
 import properties.IssoCodesTypes;
 import services.DataBase;
 import workers.ExcelWriter;

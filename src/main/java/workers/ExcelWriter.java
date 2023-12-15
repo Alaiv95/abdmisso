@@ -3,7 +3,7 @@ package workers;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import pojo.IssoData;
+import models.IssoData;
 
 import java.io.File;
 import java.io.FileOutputStream;

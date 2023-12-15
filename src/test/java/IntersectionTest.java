@@ -2,7 +2,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import pojo.IssoData;
+import models.IssoData;
 import workers.ExcelReader;
 import workers.IntersectionVerifier;
 

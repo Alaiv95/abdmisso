@@ -1,7 +1,7 @@
 package workers;
 
-import pojo.IssoData;
-import pojo.Road;
+import models.IssoData;
+import models.Road;
 import services.DataBase;
 
 import java.util.Arrays;
