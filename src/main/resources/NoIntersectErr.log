@@ -1,0 +1,1 @@
+2023-12-11 00:03:24.4028|0|ERROR|Roads.Application.Services.IntegratedData.Abdm.AbdmDataProcessor|Не найдено пересечений с дорогами АБДД. DorCode: 6660, Km: 201, M: 233 |url: |action: |Roads.Application.Services.IntegratedData.Abdm.AbdmDataProcessor.InitializeStatementAsync| body:

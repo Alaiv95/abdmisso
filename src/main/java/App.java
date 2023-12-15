@@ -1,3 +1,4 @@
+import models.NoIntersectErr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import workers.ExcelReader;
@@ -8,14 +9,6 @@ public class App {
         String sheetName = "Лист 1";
         ExcelReader excelReader = new ExcelReader();
         Logger logger = LoggerFactory.getLogger(App.class);
-        AbdmLogReader abdmLogReader = new AbdmLogReader();
-        System.out.println(abdmLogReader
-                .readLogTextFile("src/main/resources/abdd-app03-app-log-2023-12-11.log")
-                .getSpecificErrorsFromLog(AbdmLogReader.NO_INTERSECT_ERR)
-        );
-
-        int workerTypeIndex = 6;
-
 
 //        try {
 //            DataBaseWriter.dropIssoTable();

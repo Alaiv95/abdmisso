@@ -1,5 +1,8 @@
 package workers;
 
+import models.NoIntersectErr;
+import models.NoValuesErr;
+
 import java.io.*;
 import java.util.*;
 
@@ -7,19 +10,38 @@ public class AbdmLogReader {
     public static final String NO_INTERSECT_ERR = "Не найдено пересечений с дорогами АБДД";
     public static final String NO_VALUES_ERR = "Отсутствуют необходимые поля в ведомости";
     private final int ERR_PART_START_INDEX = 12;
-    private final int ERR_LOG_MIN_SIZE = 20;
-    private final int FILTERED_ERR_MSG_INDEX = 0;
 
-    private final Map<String, List<List<String>>> logValues = new HashMap<>(){{
+
+    public AbdmLogReader(String path) {
+        readLogTextFile(path);
+    }
+
+    private final Map<String, List<List<String>>> logValues = new HashMap<>() {{
         put(NO_INTERSECT_ERR, new ArrayList<>());
         put(NO_VALUES_ERR, new ArrayList<>());
     }};
 
-    public List<List<String>> getSpecificErrorsFromLog(String message) {
-        return logValues.get(message);
+    public List<NoIntersectErr> getNoIntersectErrors() {
+        return logValues.get(NO_INTERSECT_ERR).stream().map(err -> {
+                    try {
+                        return new NoIntersectErr(err);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }).toList();
     }
 
-    public AbdmLogReader readLogTextFile(String path) {
+    public List<NoValuesErr> getNoValueErrors() {
+        return logValues.get(NO_VALUES_ERR).stream().map(err -> {
+            try {
+                return new NoValuesErr(err);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
+    }
+
+    private void readLogTextFile(String path) {
         try (var reader = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -34,6 +56,7 @@ public class AbdmLogReader {
                             .filter(value -> isDigit(value) || isErrorMessage(value))
                             .toList();
 
+                    int FILTERED_ERR_MSG_INDEX = 0;
                     logValues.get(logData.get(FILTERED_ERR_MSG_INDEX)).add(logData);
                 }
 
@@ -41,11 +64,10 @@ public class AbdmLogReader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return this;
     }
 
     private boolean isAbdmErrLog(List<String> fullError) {
+        int ERR_LOG_MIN_SIZE = 20;
         return fullError.size() >= ERR_LOG_MIN_SIZE && isErrorMessage(fullError.get(ERR_PART_START_INDEX));
     }
 
