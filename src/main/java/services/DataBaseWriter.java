@@ -27,7 +27,7 @@ public class DataBaseWriter {
                     AbddRoadIds VARCHAR(500),
                     locationKm INT,
                     locationM INT,
-                    objectLength INT,
+                    objectLength VARCHAR(500),
                     AbddRoadIntersections VARCHAR(500)
                 );""";
 
@@ -54,7 +54,7 @@ public class DataBaseWriter {
             statement.setString(6, issoData.getAbddIds());
             statement.setInt(7, issoData.getKm());
             statement.setInt(8, issoData.getM());
-            statement.setInt(9, Integer.parseInt(issoData.getLength()));
+            statement.setString(9, issoData.getLength());
             statement.setString(10, issoData.getRoadsWithMatchingLen());
 
 
@@ -63,6 +63,7 @@ public class DataBaseWriter {
             logger.error(e.getMessage());
         }
     }
+
 
     protected static Connection setupConnection() throws SQLException {
         Properties properties = new Properties();

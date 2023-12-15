@@ -4,6 +4,7 @@ import pojo.IssoData;
 import properties.IssoCodesTypes;
 import properties.MyConfig;
 import services.DataBase;
+import services.DataBaseWriter;
 import workers.ExcelReader;
 import workers.IntersectionVerifier;
 
@@ -16,7 +17,9 @@ public class App {
         ExcelReader excelReader = new ExcelReader();
         Logger logger = LoggerFactory.getLogger(App.class);
 
+
         try {
+            DataBaseWriter.createIssoDataTable();
             Set<Integer> excludedTypes = Set.of(70, 90);
             Set<Integer> validIssoTypes = IssoCodesTypes.getFitleredIssoTypes(excludedTypes);
             Map<Integer, List<String>> mappingIds = excelReader.getMapOfIdsFromExcelMappingFile(MyConfig.MAPPING_FILE, sheetName);
@@ -25,7 +28,9 @@ public class App {
             List<IssoData> issoDataFromFull = fullIssoProvider.getIssoDataWithGivenTypes(validIssoTypes);
             IntersectionVerifier.setIntersectedRoadIds(issoDataFromFull, mappingIds);
 
-            fullIssoProvider.createExcelFileBasedOnData(issoDataFromFull, "issoDataResultFull");
+            issoDataFromFull.forEach(DataBaseWriter::addRowToIssoDataTable);
+
+//            fullIssoProvider.createExcelFileBasedOnData(issoDataFromFull, "issoDataResultFull");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
