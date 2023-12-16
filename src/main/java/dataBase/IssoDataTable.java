@@ -1,8 +1,6 @@
-package services;
+package dataBase;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import models.IssoData;
 import properties.MyConfig;
 
@@ -12,20 +10,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-public class DataBaseWriter {
-    private static final Logger logger = LoggerFactory.getLogger(DataBaseWriter.class);
+public class IssoDataTable extends DataBase {
 
-    public static void dropIssoTable() {
-        String query = "DROP TABLE IssoData;";
+    public void createEmptyIssoDataTable() {
+        truncateIssoTable();
 
-        try (Connection connection = setupConnection(); Statement statement = connection.createStatement()) {
-            statement.executeUpdate(query);
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    public static void createIssoDataTable() {
         String createTableQuery = """
                 CREATE TABLE IF NOT EXISTS IssoData (
                     Id serial PRIMARY KEY,\s
@@ -48,7 +37,17 @@ public class DataBaseWriter {
         }
     }
 
-    public static void addRowToIssoDataTable(IssoData issoData) {
+    private void truncateIssoTable() {
+        String query = "TRUNCATE IssoData;";
+
+        try (Connection connection = setupConnection(); Statement statement = connection.createStatement()) {
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    public void addRow(IssoData issoData) {
         String query = """
                 INSERT INTO issodata(
                 \tIssoCode, IssoType, Fku, Road, AbdmRoadCode, AbddRoadIds, locationKm,\s
@@ -75,7 +74,7 @@ public class DataBaseWriter {
     }
 
 
-    protected static Connection setupConnection() throws SQLException {
+    protected Connection setupConnection() throws SQLException {
         Properties properties = new Properties();
         properties.setProperty("user", MyConfig.W_DB_USER);
         properties.setProperty("password", MyConfig.W_DB_PASS);

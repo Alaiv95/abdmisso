@@ -2,7 +2,7 @@ package workers;
 
 import models.IssoData;
 import models.Road;
-import services.DataBase;
+import dataBase.AbddDataBase;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,7 +36,7 @@ public class IntersectionVerifier {
                 .map(v -> String.format("%s", v))
                 .collect(Collectors.toList());
 
-        return DataBase.getRoadData(ids);
+        return new AbddDataBase().getRoadData(ids);
     }
 
     private static boolean isLocationInRoadRange(int location, String id, Map<String, Road> roads) {

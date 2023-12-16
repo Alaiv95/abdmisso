@@ -1,4 +1,4 @@
-package services;
+package dataBase;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,10 +10,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class DataBase {
-    private static final Logger logger = LoggerFactory.getLogger(DataBase.class);
+public class AbddDataBase extends DataBase {
 
-    public static List<Integer> getAllExistingObjectsIsso() {
+    public  List<Integer> getAllExistingObjectsIsso() {
         String searchQuery = "select \"Payload\"->>'numberISSO' code from \"Cards\" where \"Type\" in (29, 36, 74, 75);";
         List<Integer> codes = new ArrayList<>();
 
@@ -30,7 +29,7 @@ public class DataBase {
         return codes;
     }
 
-    public static Map<String, Road> getRoadData(List<String> roadIds) {
+    public Map<String, Road> getRoadData(List<String> roadIds) {
         String searchQuery = String.format("select \"Id\", \"StartDecree\", \"EndDecree\" from \"Roads\" where \"Id\" in (%s);",
                 roadIds.stream().map(v -> "?").collect(Collectors.joining(", ")));
 
@@ -65,7 +64,7 @@ public class DataBase {
         return roads;
     }
 
-    protected static Connection setupConnection() throws SQLException {
+    protected Connection setupConnection() throws SQLException {
         Properties properties = new Properties();
         properties.setProperty("user", MyConfig.DB_USER);
         properties.setProperty("password", MyConfig.DB_PASS);

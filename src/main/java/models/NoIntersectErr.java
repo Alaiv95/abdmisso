@@ -13,14 +13,6 @@ public class NoIntersectErr {
     private final String m;
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        NoIntersectErr that = (NoIntersectErr) o;
-        return Objects.equals(message, that.message) && Objects.equals(roadCode, that.roadCode) && Objects.equals(km, that.km) && Objects.equals(m, that.m);
-    }
-
-    @Override
     public int hashCode() {
         return Objects.hash(message, roadCode, km, m);
     }
@@ -38,5 +30,14 @@ public class NoIntersectErr {
         roadCode = errorData.get(ROAD_CODE_INDEX);
         km = errorData.get(KM_INDEX);
         m = errorData.get(M_INDEX);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NoIntersectErr that = (NoIntersectErr) o;
+        return Objects.equals(message, that.message) && Objects.equals(roadCode, that.roadCode) &&
+                Objects.equals(km, that.km) && Objects.equals(m, that.m);
     }
 }

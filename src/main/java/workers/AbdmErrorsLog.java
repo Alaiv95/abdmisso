@@ -4,16 +4,24 @@ import models.NoIntersectErr;
 import models.NoValuesErr;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Stream;
 
-public class AbdmLogReader {
+public class AbdmErrorsLog {
     public static final String NO_INTERSECT_ERR = "Не найдено пересечений с дорогами АБДД";
     public static final String NO_VALUES_ERR = "Отсутствуют необходимые поля в ведомости";
     private final int ERR_PART_START_INDEX = 12;
 
+    public AbdmErrorsLog(String path) {
+        File file = new File(path);
 
-    public AbdmLogReader(String path) {
-        readLogTextFile(path);
+        if (file.isFile())
+            readLogTextFile(file);
+        else if (file.isDirectory())
+            readLogFilesFromDirectory(path);
     }
 
     private final Map<String, List<List<String>>> logValues = new HashMap<>() {{
@@ -22,26 +30,42 @@ public class AbdmLogReader {
     }};
 
     public List<NoIntersectErr> getNoIntersectErrors() {
-        return logValues.get(NO_INTERSECT_ERR).stream().map(err -> {
+        return logValues.get(NO_INTERSECT_ERR)
+                .stream()
+                .map(err -> {
                     try {
                         return new NoIntersectErr(err);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                }).toList();
+                })
+                .distinct().toList();
     }
 
     public List<NoValuesErr> getNoValueErrors() {
-        return logValues.get(NO_VALUES_ERR).stream().map(err -> {
-            try {
-                return new NoValuesErr(err);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }).toList();
+        return logValues.get(NO_VALUES_ERR)
+                .stream()
+                .map(err -> {
+                    try {
+                        return new NoValuesErr(err);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .distinct().toList();
     }
 
-    private void readLogTextFile(String path) {
+    private void readLogFilesFromDirectory(String filePath) {
+        try (Stream<Path> paths = Files.walk(Paths.get(filePath))) {
+            paths.filter(Files::isRegularFile)
+                    .map(Path::toFile)
+                    .forEach(this::readLogTextFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void readLogTextFile(File path) {
         try (var reader = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
             String line;
             while ((line = reader.readLine()) != null) {

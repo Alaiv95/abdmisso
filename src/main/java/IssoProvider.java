@@ -1,7 +1,7 @@
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import models.IssoData;
 import properties.IssoCodesTypes;
-import services.DataBase;
+import dataBase.AbddDataBase;
 import workers.ExcelWriter;
 import workers.Serializer;
 
@@ -19,7 +19,7 @@ public abstract class IssoProvider {
     private final ExcelWriter excelWriter;
 
     public IssoProvider(Map<Integer, List<String>> mapping) {
-        existingObjectsIsso = DataBase.getAllExistingObjectsIsso();
+        existingObjectsIsso = new AbddDataBase().getAllExistingObjectsIsso();
         idMapping = mapping;
         serializer = new Serializer();
         excelWriter = new ExcelWriter(new XSSFWorkbook());
