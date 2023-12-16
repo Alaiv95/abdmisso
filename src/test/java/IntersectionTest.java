@@ -37,8 +37,8 @@ public class IntersectionTest {
         List<IssoData> issoData = fullIssoProvider.getIssoDataWithGivenTypes(includedIssoTypes);
         IntersectionVerifier.setIntersectedRoadIds(issoData, mappingIds);
 
-        IssoData issoData1 = issoData.stream().filter(data -> data.getCIsso() == cIsso1).toList().get(0);
-        IssoData issoData2 = issoData.stream().filter(data -> data.getCIsso() == cIsso2).toList().get(0);
+        IssoData issoData1 = issoData.stream().filter(data -> data.getCIsso() == cIsso1).findFirst().orElseThrow();
+        IssoData issoData2 = issoData.stream().filter(data -> data.getCIsso() == cIsso2).findFirst().orElseThrow();
 
         Assertions.assertEquals(expectedRoadId1, issoData1.getRoadsWithMatchingLen().trim());
         Assertions.assertEquals(expectedRoadId2, issoData2.getRoadsWithMatchingLen().trim());
