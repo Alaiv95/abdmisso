@@ -23,7 +23,8 @@ public class IssoDataTable extends LogsDatabase {
                     LocationKm INT,
                     LocationM INT,
                     ObjectLength VARCHAR(500),
-                    AbddRoadIntersections VARCHAR(500)
+                    AbddRoadIntersections VARCHAR(500),
+                    Identifier VARCHAR(150)
                 );""", ISSO_DATA_TABLE_NAME);
 
         try (Connection connection = setupConnection(); Statement statement = connection.createStatement()) {
@@ -37,10 +38,13 @@ public class IssoDataTable extends LogsDatabase {
     public void addRow(IssoData issoData) {
         String query = "INSERT INTO " + ISSO_DATA_TABLE_NAME + """
                  (IssoCode, IssoType, Fku, Road, AbdmRoadCode, AbddRoadIds, LocationKm,
-                 LocationM, ObjectLength, AbddRoadIntersections)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);""";
+                 LocationM, ObjectLength, AbddRoadIntersections, Identifier)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);""";
 
         try (var connection = setupConnection(); var statement = connection.prepareStatement(query)) {
+            String identifier = String.format("%s_%s_%s", issoData.getDorCode(),
+                    issoData.getKm(), issoData.getM());
+
             statement.setInt(1, issoData.getCIsso());
             statement.setInt(2, Integer.parseInt(issoData.getIssoTypeCode()));
             statement.setString(3, issoData.getOrgName());
@@ -51,7 +55,7 @@ public class IssoDataTable extends LogsDatabase {
             statement.setInt(8, issoData.getM());
             statement.setString(9, issoData.getLength());
             statement.setString(10, issoData.getRoadsWithMatchingLen());
-
+            statement.setString(11, identifier);
 
             statement.executeUpdate();
         } catch (SQLException e) {

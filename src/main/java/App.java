@@ -27,7 +27,6 @@ public class App {
         AbdmErrorsLog abdmErrorsLog = new AbdmErrorsLog(MyConfig.LOG_DIR_PATH);
         initDatabaseTables();
 
-
         try {
             Set<Integer> excludedTypes = Set.of(70, 90);
             Set<Integer> validIssoTypes = IssoCodesTypes.getFitleredIssoTypes(excludedTypes);
