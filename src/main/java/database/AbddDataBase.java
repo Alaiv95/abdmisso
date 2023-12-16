@@ -1,7 +1,5 @@
-package dataBase;
+package database;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import models.Road;
 import properties.MyConfig;
 

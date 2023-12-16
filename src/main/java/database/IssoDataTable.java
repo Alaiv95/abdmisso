@@ -1,57 +1,43 @@
-package dataBase;
+package database;
 
 
 import models.IssoData;
-import properties.MyConfig;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
 
-public class IssoDataTable extends DataBase {
+public class IssoDataTable extends LogsDatabase {
 
     public void createEmptyIssoDataTable() {
-        truncateIssoTable();
 
-        String createTableQuery = """
-                CREATE TABLE IF NOT EXISTS IssoData (
-                    Id serial PRIMARY KEY,\s
-                    IssoCode INT,\s
+        String createTableQuery = String.format("""
+                CREATE TABLE IF NOT EXISTS %s (
+                    Id serial PRIMARY KEY,
+                    IssoCode INT UNIQUE,
                     IssoType INT,
                     Fku VARCHAR(300),
                     Road VARCHAR(400),
                     AbdmRoadCode INT,
                     AbddRoadIds VARCHAR(500),
-                    locationKm INT,
-                    locationM INT,
-                    objectLength VARCHAR(500),
+                    LocationKm INT,
+                    LocationM INT,
+                    ObjectLength VARCHAR(500),
                     AbddRoadIntersections VARCHAR(500)
-                );""";
+                );""", ISSO_DATA_TABLE_NAME);
 
         try (Connection connection = setupConnection(); Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableQuery);
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void truncateIssoTable() {
-        String query = "TRUNCATE IssoData;";
-
-        try (Connection connection = setupConnection(); Statement statement = connection.createStatement()) {
-            statement.executeUpdate(query);
+            truncateTable(ISSO_DATA_TABLE_NAME);
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }
     }
 
     public void addRow(IssoData issoData) {
-        String query = """
-                INSERT INTO issodata(
-                \tIssoCode, IssoType, Fku, Road, AbdmRoadCode, AbddRoadIds, locationKm,\s
-                \tlocationM, objectLength, AbddRoadIntersections)
+        String query = "INSERT INTO " + ISSO_DATA_TABLE_NAME + """
+                 (IssoCode, IssoType, Fku, Road, AbdmRoadCode, AbddRoadIds, LocationKm,
+                 LocationM, ObjectLength, AbddRoadIntersections)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);""";
 
         try (var connection = setupConnection(); var statement = connection.prepareStatement(query)) {
@@ -71,14 +57,5 @@ public class IssoDataTable extends DataBase {
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }
-    }
-
-
-    protected Connection setupConnection() throws SQLException {
-        Properties properties = new Properties();
-        properties.setProperty("user", MyConfig.W_DB_USER);
-        properties.setProperty("password", MyConfig.W_DB_PASS);
-
-        return DriverManager.getConnection(MyConfig.W_DB_URL, properties);
     }
 }

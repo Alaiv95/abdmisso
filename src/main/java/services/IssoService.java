@@ -62,6 +62,21 @@ public class IssoService {
 
     }
 
+    public static List<Map<Object, Object>> getAllFullIsso() {
+        logger.info("Getting all full isso based on types from ABDM.");
+        Set<Integer> allIssoTypes = IssoCodesTypes.getAllIssoTypes();
+
+        List<Map<Object, Object>> mapOfTypes = allIssoTypes
+                .stream()
+                .map(IssoService::getAllFullIssoOfType)
+                .flatMap(List::stream)
+                .toList();
+
+        logger.info("Finished Getting all full isso.");
+
+        return mapOfTypes;
+    }
+
     public static List<Map<Object, Object>> getAllFullIssoOfType(int issoType) {
         String allIssoUrl = MyConfig.ALL_FULL_ISSO_URL + issoType;
 
@@ -81,16 +96,5 @@ public class IssoService {
                     .jsonPath()
                     .getJsonObject("");
         }
-    }
-
-    public static List<Map<Object, Object>> getAllFullIsso() {
-        logger.info("Getting all full isso based on types from ABDM.");
-        Set<Integer> allIssoTypes = IssoCodesTypes.getAllIssoTypes();
-
-        return allIssoTypes
-                .stream()
-                .map(IssoService::getAllFullIssoOfType)
-                .flatMap(List::stream)
-                .toList();
     }
 }

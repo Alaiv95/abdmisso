@@ -10,6 +10,17 @@ public class NoValuesErr {
     private final String message;
     private final String issoCode;
 
+    public NoValuesErr(List<String> errorData) throws Exception {
+        if(errorData.size() != 2)
+            throw new Exception("Not a values error");
+
+        int MSG_INDEX = 0;
+        int ISSO_CODE_INDEX = 1;
+
+        message = errorData.get(MSG_INDEX);
+        issoCode = errorData.get(ISSO_CODE_INDEX);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -21,16 +32,5 @@ public class NoValuesErr {
     @Override
     public int hashCode() {
         return Objects.hash(message, issoCode);
-    }
-
-    public NoValuesErr(List<String> errorData) throws Exception {
-        if(errorData.size() != 2)
-            throw new Exception("Not a values error");
-
-        int MSG_INDEX = 0;
-        int ISSO_CODE_INDEX = 1;
-
-        message = errorData.get(MSG_INDEX);
-        issoCode = errorData.get(ISSO_CODE_INDEX);
     }
 }

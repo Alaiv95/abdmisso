@@ -20,4 +20,5 @@ public interface MyConfig {
     String W_DB_URL = config.getString("W_DB_URL");
     String W_DB_USER = config.getString("W_DB_USER");
     String W_DB_PASS = config.getString("W_DB_PASS");
+    String LOG_DIR_PATH = config.getString("LOG_DIR_PATH");
 }
