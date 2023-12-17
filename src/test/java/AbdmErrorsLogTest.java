@@ -44,8 +44,8 @@ public class AbdmErrorsLogTest {
 
     @ParameterizedTest
     @ValueSource(strings = {logDirPath, logDirDupesPath})
-    public void errorsTestFromDir() throws Exception {
-        AbdmErrorsLog abdmErrorsLog = new AbdmErrorsLog(logDirPath);
+    public void errorsTestFromDir(String path) throws Exception {
+        AbdmErrorsLog abdmErrorsLog = new AbdmErrorsLog(path);
         var expectedValErr = new NoValuesErr(List.of(AbdmErrorsLog.NO_VALUES_ERR, "3300523"));
         var expectedIntersectErr = new NoIntersectErr(List.of(AbdmErrorsLog.NO_INTERSECT_ERR, "6660", "201", "233"));
 
